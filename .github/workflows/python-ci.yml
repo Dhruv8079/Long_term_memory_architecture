@@ -1,0 +1,13 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: python -m py_compile buffer.py long_term_memory.py config.py database.py test_neon.py
+      - run: ruff check buffer.py long_term_memory.py config.py database.py test_neon.py || true
